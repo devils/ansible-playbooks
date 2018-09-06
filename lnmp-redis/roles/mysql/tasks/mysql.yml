@@ -1,0 +1,13 @@
+---
+
+- name: install mariadb
+  yum:
+    name: mariadb-server
+    state: present
+
+- name: create mysql config
+  template:
+    src: my.cnf.j2
+    dest: /etc/my.cnf
+  notify:
+    - start and enabled mariadb

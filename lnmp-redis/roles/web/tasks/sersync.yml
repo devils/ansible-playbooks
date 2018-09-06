@@ -1,0 +1,30 @@
+---
+
+- name: create sersync directory
+  file:
+    path: /usr/local/sersync/{{ item }}
+    state: directory
+  with_items:
+    - bin
+    - config
+    - script
+
+- name: copy sersync bin and config
+  copy:
+    src: sersync/sersync2
+    dest: /usr/local/sersync/bin/sersync2
+    mode: 0750
+
+- name: create www_chmod.xml
+  template:
+    src: sersync/www_chmod.xml.j2
+    dest: /usr/local/sersync/config/www_chmod.xml
+
+- name: create chmod.sh
+  copy:
+    src: sersync/chmod.sh
+    dest: /usr/local/sersync/script/chmod.sh
+    mode: 0750
+  notify:
+    - start sersync
+

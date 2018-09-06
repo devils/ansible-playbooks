@@ -1,0 +1,8 @@
+---
+
+- name: install redis
+  yum:
+    name: redis
+    state: present
+  notify:
+    - start and enabled redis
