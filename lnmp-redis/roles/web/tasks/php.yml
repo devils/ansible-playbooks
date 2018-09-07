@@ -1,0 +1,20 @@
+---
+- name: install php
+  yum: name={{ item }} state=present
+  with_items:
+    - php
+    - php-fpm
+    - php-mysqlnd
+
+- name: create php config
+  template:
+    src: php/{{ item.src }}
+    dest: /etc/{{ item.dest }}
+  with_items:
+    - { src: php.ini.j2, dest: php.ini}
+    - { src: php-fpm.conf.j2, dest: php-fpm.conf }
+    - { src: www.conf.j2, dest: php-fpm.d/www.conf}
+
+  notify:
+    - start and enabled php
+

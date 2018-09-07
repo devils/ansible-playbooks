@@ -1,0 +1,99 @@
+[client]
+default-character-set   = utf8
+socket                  = /var/lib/mysql/mysql.sock
+
+[mysql]
+no-auto-rehash
+
+[mysqld]
+#global
+skip-name-resolve
+table_open_cache        = 1024
+thread_cache_size       = 1024
+max_heap_table_size     = 128M
+tmp_table_size          = 128M
+read_buffer_size        = 2M
+read_rnd_buffer_size    = 16M
+sort_buffer_size        = 4M
+join_buffer_size        = 2M
+thread_stack            = 192K
+log_bin_trust_function_creators = 1
+
+#network
+interactive_timeout     = 14400
+wait_timeout            = 14400
+max_connections         = 1024
+max_allowed_packet      = 16M
+back_log                = 1000
+max_connect_errors      = 10000
+
+#character-set
+character-set-server    = utf8
+
+#binlog
+expire_logs_days        = 6
+log-bin                 = mysql-bin
+binlog-format           = mixed 
+binlog_cache_size       = 10M
+#sync_binlog             = 8
+
+#slow log
+slow_query_log
+long_query_time         = 1
+
+#replication
+server-id               = 1
+
+#relaylog
+relay-log               = relay-bin
+
+#sql,transaction
+transaction-isolation   = REPEATABLE-READ
+lower_case_table_names  = 1
+ft_min_word_len         = 2
+
+#innodb
+default_storage_engine  = INNODB
+innodb_max_dirty_pages_pct = 90
+innodb_buffer_pool_size = 128M
+innodb_flush_log_at_trx_commit = 0
+innodb_file_per_table   = 1
+innodb_flush_method     = O_DIRECT
+innodb_log_buffer_size  = 8M
+innodb_log_file_size    = 100M
+innodb_table_locks      = 0
+
+innodb_additional_mem_pool_size = 16M
+innodb_file_io_threads          = 4
+innodb_thread_concurrency       = 8
+
+#query cache
+query_cache_type        = 1
+query_cache_size        = 64M
+query_cache_limit       = 2M
+
+#myisam
+key_buffer_size         = 32M
+bulk_insert_buffer_size = 64M
+myisam_sort_buffer_size = 128M
+myisam_max_sort_file_size = 256M
+skip_external_locking
+myisam_repair_threads   = 1
+#myisam_recover_options
+
+[mysqld_multi]
+mysqld          = /usr/bin/mysqld_safe
+mysqladmin      = /usr/bin/mysqladmin
+user = multi_admin
+password = multi_sok123456
+
+[mysqldump]
+quick
+max_allowed_packet = 64M
+
+[myisamchk]
+key_buffer_size = 256M
+sort_buffer_size = 256M
+read_buffer = 2M
+write_buffer = 2M
+innodb_log_files_in_group  = 4

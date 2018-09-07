@@ -1,0 +1,44 @@
+global_defs {
+    notification_email {
+        root@localhost
+    }
+    notification_email_from root@localhost
+    smtp_server 127.0.0.1
+    smtp_connect_timeout 30
+    router_id lvs_{{ ansible_hostname }}
+    #vrrp_skip_check_adv_addr
+    #vrrp_strict
+    #vrrp_garp_interval 0
+    #vrrp_gna_interval 0
+}
+
+vrrp_script chk_haproxy {
+    script "/etc/keepalived/check_haproxy.sh"
+    interval 2
+    user root
+}
+
+vrrp_instance {{ project }} {
+{% if master == ansible_default_ipv4.address %}
+    state MASTER
+    priority 100
+{% else %}
+    state BACKUP
+    priority 60
+{% endif %}
+    interface {{ ansible_default_ipv4.interface }}
+    virtual_router_id {{ virtual_router_id }}
+    advert_int 1
+    authentication {
+        auth_type PASS
+        auth_pass {{ auth_pass }}
+    }
+    virtual_ipaddress {
+        {{ vip }}
+    }
+
+    track_script {
+        chk_haproxy
+    }   
+
+}

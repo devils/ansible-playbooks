@@ -1,0 +1,33 @@
+---
+
+- name: create rsyncd.conf.d directory
+  file:
+    path: /etc/rsyncd.conf.d
+    state: directory
+
+- name: create rsync other file
+  copy:
+    src: rsync/rsyncd.pass
+    dest: /etc/rsyncd.conf.d/rsyncd.pass
+    mode: 0600
+
+- name: create rsync other file
+  copy:
+    src: rsync/rsyncd.exclude
+    dest: /etc/rsyncd.conf.d/rsyncd.exclude
+
+- name: create project directory
+  file:
+    path: '{{ html_root }}/{{ project }}'
+    state: directory
+    owner: nginx
+    group: nginx
+    mode: 0770
+
+- name: create rsync config
+  template:
+    src: rsync/rsyncd.conf.j2
+    dest: /etc/rsyncd.conf
+  notify:
+    - start and enabled rsync
+

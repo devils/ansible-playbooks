@@ -1,0 +1,6 @@
+---
+
+- include: nginx.yml
+- include: php.yml
+- include: sersync.yml
+- include: rsync.yml

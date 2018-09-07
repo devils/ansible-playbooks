@@ -1,0 +1,11 @@
+---
+
+- name: start keepalived
+  service:
+    name: keepalived
+    state: started
+
+- name: enable keepalived
+  service:
+    name: keepalived
+    enabled: yes

@@ -1,0 +1,29 @@
+---
+
+- name: init sysctl
+  sysctl:
+    name: "{{ item.name }}"
+    value: "{{ item.value }}"
+    sysctl_set: yes
+    reload: yes
+  with_items:
+    - { name: 'net.ipv4.ip_forward', value: 1 }
+
+- name: install keepalived
+  yum:
+    name: keepalived
+    state: present
+
+- name: crate keepalived.conf 
+  template:
+    src: keepalived/keepalived.conf.j2
+    dest: /etc/keepalived/keepalived.conf
+
+- name: crate check_haproxy.sh 
+  template:
+    src: keepalived/check_haproxy.sh.j2
+    dest: /etc/keepalived/check_haproxy.sh 
+    mode: 0750
+  notify:
+    - start keepalived
+    - enable keepalived

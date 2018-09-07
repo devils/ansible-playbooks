@@ -1,0 +1,6 @@
+---
+
+- name: start sersync
+  shell: |
+    /usr/local/sersync/bin/sersync2 -m command -d -o /usr/local/sersync/config/www_chmod.xml
+    grep '^/usr/local/sersync/bin/sersync2 -m command -d -o /usr/local/sersync/config/www_chmod.xml' /etc/rc.local || echo '/usr/local/sersync/bin/sersync2 -m command -d -o /usr/local/sersync/config/www_chmod.xml' >> /etc/rc.local

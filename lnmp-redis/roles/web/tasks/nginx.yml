@@ -1,0 +1,15 @@
+---
+
+- name: install nginx
+  yum: name=nginx state=present
+
+- name: create nginx config
+  template:
+    src: nginx/nginx.conf.j2
+    dest: /etc/nginx/nginx.conf
+
+- name: create host config
+  template:
+    src: nginx/host.conf.j2
+    dest: /etc/nginx/conf.d/{{ project }}.conf
+  notify: start and enabled nginx

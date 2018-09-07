@@ -1,0 +1,26 @@
+---
+
+- name: common init
+  hosts: all
+  roles:
+    - { role: common, tags: common }
+
+- name: install nginx and php
+  hosts: web
+  roles:
+    - { role: web, tags: web }
+
+- name: install mysql
+  hosts: mysql
+  roles:
+    - { role: mysql, tags: mysql }
+
+- name: install redis
+  hosts: redis
+  roles:
+    - { role: redis, tags: redis }
+
+- name: install haproxy, keepalived
+  hosts: ha-slb
+  roles:
+    - { role: ha-slb, tags: ha-slb }

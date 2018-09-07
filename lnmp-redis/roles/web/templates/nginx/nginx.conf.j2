@@ -1,0 +1,82 @@
+user  nginx nginx;
+
+worker_processes 5;
+#worker_cpu_affinity 00000001 00000010 00000100 00001000 00010000 00100000 01000000 10000000;
+
+# error log level: debug, info, notice, warn, error, crit.default level: crit
+error_log  /var/log/nginx_error.log debug;
+
+#Specifies the value for maximum file descriptors that can be opened by this process.
+worker_rlimit_nofile 65535;
+
+events
+{
+  use epoll;
+  worker_connections 65535;
+}
+
+http
+{
+  include       mime.types;
+  default_type  application/octet-stream;
+
+  #charset utf-8;
+  #log_escape_non_ascii off;
+  access_log  off;
+
+  server_names_hash_bucket_size 128;
+  client_header_buffer_size 256k;
+  large_client_header_buffers 4 64k;
+  client_max_body_size 8m;
+
+  sendfile on;
+  tcp_nopush     on;
+
+  keepalive_timeout 120; #75s
+
+  #add_header ServerID JSWX4;
+
+  tcp_nodelay on;
+
+  fastcgi_connect_timeout 600;
+  fastcgi_send_timeout 600;
+  fastcgi_read_timeout 600;
+  fastcgi_buffer_size 128k;
+  fastcgi_buffers 16 128k;
+  fastcgi_busy_buffers_size 128k;
+  fastcgi_temp_file_write_size 128k;
+
+  gzip on;
+  gzip_min_length   1k;
+  gzip_buffers  4 16k;
+  gzip_http_version 1.0;
+  gzip_comp_level 2;
+  gzip_types    text/plain application/x-javascript text/css application/xml;
+  gzip_vary on;
+
+  server_name_in_redirect off;
+  server_tokens off;
+
+  #limit_zone  crawler  $binary_remote_addr  10m;
+
+  server {
+    listen  8888;
+
+    location / {
+      deny all;
+    }
+    location /check.gif {
+      empty_gif;
+      allow 192.168.1.0/24;
+      deny all;
+    }
+    location /status {
+      allow 192.168.1.0/24;
+      deny all;
+      stub_status on;
+    }
+  }
+
+  include   conf.d/*.conf;
+}
+

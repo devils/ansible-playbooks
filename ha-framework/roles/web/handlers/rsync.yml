@@ -1,0 +1,7 @@
+---
+
+- name: start and enabled rsync
+  service:
+    name: rsyncd
+    state: started
+    enabled: yes

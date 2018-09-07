@@ -1,0 +1,8 @@
+html_root: /www
+project: forthelichking
+domain: for.thelich.king
+vip: 192.168.24.250
+auth_pass: 1234
+master: 192.168.24.181
+http_port: 80
+virtual_router_id: 38
